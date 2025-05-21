@@ -1,5 +1,5 @@
 // Configure the backend URL
-const BACKEND_URL = "https://sentiment-analysis-api-dhgv.onrender.com";
+const BACKEND_URL = "https://spotify-review-sent-analysis-api.onrender.com";
 
 function analyzeSentiment() {
     const review = document.getElementById("review").value;
