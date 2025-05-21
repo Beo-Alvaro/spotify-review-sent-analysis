@@ -17,8 +17,8 @@ nltk.download('punkt_tab')
 
 app = Flask(__name__)
 
-# Allow requests from any origin for deployment flexibility
-CORS(app)
+# Explicitly allow requests from GitHub Pages and other origins
+cors = CORS(app, resources={r"/*": {"origins": ["https://beo-alvaro.github.io", "http://localhost:5500", "*"]}})
 
 logging.basicConfig(level=logging.INFO)
 
@@ -39,8 +39,15 @@ def reprocess_text(text):
     filtered_tokens = [lemmatizer.lemmatize(word) for word in tokens if word.isalnum() and word not in stop_words]
     return ' '.join(filtered_tokens)
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['POST', 'OPTIONS'])
 def predict():
+    # Handle preflight OPTIONS request
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST')
+        return response
+
     try:
         data = request.get_json()
         logging.info(f"Received data: {data}")
