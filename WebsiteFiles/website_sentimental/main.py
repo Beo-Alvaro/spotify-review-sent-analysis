@@ -8,6 +8,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 import logging
+import os
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -16,8 +17,8 @@ nltk.download('punkt_tab')
 
 app = Flask(__name__)
 
-# Allow only requests from the frontend
-CORS(app, resources={r"/predict": {"origins": "http://127.0.0.1:5500"}})
+# Allow requests from any origin for deployment flexibility
+CORS(app)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -61,5 +62,7 @@ def predict():
         return jsonify({'error': str(e)})
 
 if __name__ == "__main__":
-    app.run(port=7423, debug=True)
+    # Use PORT environment variable with fallback to 7423
+    port = int(os.environ.get("PORT", 7423))
+    app.run(host='0.0.0.0', port=port, debug=True)
 

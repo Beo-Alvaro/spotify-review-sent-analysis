@@ -1,0 +1,122 @@
+:root {
+    --spotify-black: #191414;
+    --spotify-dark: #212121;
+    --spotify-green: #1DB954;
+    --spotify-light: #535353;
+    --spotify-white: #FFFFFF;
+}
+
+body {
+    font-family: 'Circular', Arial, sans-serif;
+    background-color: var(--spotify-black);
+    color: var(--spotify-white);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    width: 90%;
+    max-width: 500px;
+    background-color: var(--spotify-dark);
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 50px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    color: var(--spotify-white);
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--spotify-light);
+    border: none;
+    border-radius: 4px;
+    color: var(--spotify-white);
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: 2px solid var(--spotify-green);
+}
+
+input::placeholder {
+    color: #b3b3b3;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--spotify-green);
+    color: var(--spotify-black);
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button:hover {
+    background-color: #1ed760;
+    transform: scale(1.02);
+}
+
+.sentiment-result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.sentiment-result.negative {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: #ff4d4d;
+    opacity: 1;
+}
+
+.sentiment-result.neutral {
+    background-color: rgba(255, 255, 0, 0.1);
+    color: #ffff4d;
+    opacity: 1;
+}
+
+.sentiment-result.positive {
+    background-color: rgba(29, 185, 84, 0.1);
+    color: #1DB954;
+    opacity: 1;
+}
+
+.logo {
+    margin-top: 30px;
+    font-size: 14px;
+    color: var(--spotify-light);
+}
+
+.logo span {
+    color: var(--spotify-green);
+    font-weight: bold;
+}
