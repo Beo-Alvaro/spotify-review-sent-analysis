@@ -1,5 +1,6 @@
-// Configure the backend URL - change this when you deploy
-const BACKEND_URL = "http://127.0.0.1:7423";
+// Configure the backend URL - replace with your Render.com URL
+// For example: https://sentiment-analysis-api.onrender.com
+const BACKEND_URL = "YOUR_RENDER_URL_HERE";
 
 function analyzeSentiment() {
     const review = document.getElementById("review").value;
