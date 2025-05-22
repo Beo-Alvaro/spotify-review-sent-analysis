@@ -1,8 +1,14 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy requirements first (for better caching)
+# Upgrade pip first
+RUN pip install --upgrade pip
+
+# Install numpy explicitly first (crucial for fixing numpy._core error)
+RUN pip install numpy==1.23.5
+
+# Copy requirements and install remaining dependencies
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
