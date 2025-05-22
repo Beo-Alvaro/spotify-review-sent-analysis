@@ -1,8 +1,8 @@
-FROM python:3.11-slim
+FROM python:3.9-slim
 
 WORKDIR /app
 
-# Install system dependencies required for building scikit-learn
+# Install system dependencies required for building packages
 RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
@@ -12,16 +12,15 @@ RUN apt-get update && apt-get install -y \
 # Upgrade pip first
 RUN pip install --upgrade pip
 
-# Install numpy explicitly first (crucial for fixing numpy._core error)
+# Install numpy explicitly with exact version (CRITICAL)
 RUN pip install numpy==1.23.5
 
-# Install scikit-learn with a version that has prebuilt wheels for Python 3.11
-RUN pip install scikit-learn==1.1.3 --only-binary :all:
-
-# Copy requirements and install remaining dependencies (excluding scikit-learn)
+# Copy requirements file first
 COPY requirements.txt /app/
-RUN grep -v "scikit-learn" requirements.txt > requirements_no_sklearn.txt && \
-    pip install --no-cache-dir -r requirements_no_sklearn.txt
+
+# Install dependencies excluding numpy (already installed)
+RUN grep -v "numpy" requirements.txt > requirements_no_numpy.txt && \
+    pip install --no-cache-dir -r requirements_no_numpy.txt
 
 # Download NLTK data
 RUN python -m nltk.downloader punkt stopwords wordnet
@@ -29,10 +28,13 @@ RUN python -m nltk.downloader punkt stopwords wordnet
 # Copy all other files
 COPY . /app/
 
+# Test numpy installation explicitly to verify _core is available
+RUN python -c "import numpy; print('Numpy version:', numpy.__version__); import numpy._core; print('Numpy core imported successfully')"
+
 # Show current directory contents for debug
 RUN ls -la /app/
 
-# Make port 8000 available to the world outside this container
+# Make port available to the world outside this container
 EXPOSE $PORT
 
 # Run the application when the container launches
