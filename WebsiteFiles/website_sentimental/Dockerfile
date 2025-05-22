@@ -15,12 +15,13 @@ RUN pip install --upgrade pip
 # Install numpy explicitly first (crucial for fixing numpy._core error)
 RUN pip install numpy==1.23.5
 
-# Install scikit-learn with a specific version that has prebuilt wheels
-RUN pip install scikit-learn==1.0.2 --only-binary :all:
+# Install scikit-learn with a version that has prebuilt wheels for Python 3.11
+RUN pip install scikit-learn==1.1.3 --only-binary :all:
 
 # Copy requirements and install remaining dependencies (excluding scikit-learn)
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt | grep -v "Requirement already satisfied: scikit-learn" || true
+RUN grep -v "scikit-learn" requirements.txt > requirements_no_sklearn.txt && \
+    pip install --no-cache-dir -r requirements_no_sklearn.txt
 
 # Download NLTK data
 RUN python -m nltk.downloader punkt stopwords wordnet
