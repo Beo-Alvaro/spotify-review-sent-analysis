@@ -6,6 +6,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
+    python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip first
@@ -14,9 +15,12 @@ RUN pip install --upgrade pip
 # Install numpy explicitly first (crucial for fixing numpy._core error)
 RUN pip install numpy==1.23.5
 
-# Copy requirements and install remaining dependencies
+# Install scikit-learn with a specific version that has prebuilt wheels
+RUN pip install scikit-learn==1.0.2 --only-binary :all:
+
+# Copy requirements and install remaining dependencies (excluding scikit-learn)
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt | grep -v "Requirement already satisfied: scikit-learn" || true
 
 # Download NLTK data
 RUN python -m nltk.downloader punkt stopwords wordnet
