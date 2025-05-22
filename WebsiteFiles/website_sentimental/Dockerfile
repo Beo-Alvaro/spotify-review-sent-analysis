@@ -15,17 +15,19 @@ RUN pip install --upgrade pip
 # Install numpy explicitly with the exact version that should work
 RUN pip install numpy==1.22.4
 
-# Copy requirements file first
-COPY requirements.txt /app/
-
-# Install dependencies excluding numpy (already installed)
-RUN grep -v "numpy" requirements.txt > requirements_no_numpy.txt && \
-    pip install --no-cache-dir -r requirements_no_numpy.txt
+# Copy specific dependencies with compatible versions
+RUN pip install scikit-learn==1.0.2 \
+    joblib==1.1.1 \
+    flask==2.2.5 \
+    flask-cors==3.0.10 \
+    nltk==3.8.1 \
+    pandas==1.5.3 \
+    gunicorn==21.2.0
 
 # Download NLTK data
 RUN python -m nltk.downloader punkt stopwords wordnet
 
-# Copy all other files
+# Copy application files
 COPY . /app/
 
 # Show current directory contents for debug
